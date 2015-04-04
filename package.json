@@ -1,0 +1,31 @@
+{
+  "name": "numbercatch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "grunt": "^0.4.5"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-copy-to": "0.0.12",
+    "grunt-string-replace": "^1.0.0",
+    "grunt-typescript": "^0.6.1",
+    "typescript": "^1.4.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antoniocordasco/numbercatch.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/antoniocordasco/numbercatch/issues"
+  },
+  "homepage": "https://github.com/antoniocordasco/numbercatch"
+}
