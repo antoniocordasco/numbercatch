@@ -10,20 +10,20 @@ module Numbercatch {
 
         public static scaleMultiplier = .3;
 
-        public constructor(game, content) {
-            super(game);
+        public constructor(gameScene, content) {
+            super(gameScene);
             this.content = content;
 
-            this.tileImage = new TileSprite(game, 0, 0);
+            this.tileImage = new TileSprite(gameScene, 0, 0);
             this.add(this.tileImage);
 
             this.tileImage.inputEnabled = true;
             this.tileImage.events.onInputDown.add(() => {
-                game.moveCharacterTo(this.coordinateX, this.coordinateY);
+                gameScene.moveCharacterTo(this.coordinateX, this.coordinateY, true);
             }, this);
 
             if(content) {
-                var bmpText = game.add.text(0, 0, this.content, { font: "65px Arial", fill: "#ff0044", align: "center" });
+                var bmpText = gameScene.add.text(0, 0, this.content, { font: "65px Arial", fill: "#ff0044", align: "center" });
                 bmpText.anchor.setTo(.5,.5);
                 this.add(bmpText);
             }
@@ -49,25 +49,53 @@ module Numbercatch {
         }
 
         getCloseTileCoordinates(direction) {
-            var ret = {};
-            if(direction == 'top') {
-                ret = {'x': this.coordinateX, 'y': this.coordinateY-2};
-            } else if(direction == 'topRight') {
-                var tmp = ((this.coordinateX%2 == 0) ? 0 : 1);
-                ret = {'x': this.coordinateX+tmp, 'y': this.coordinateY-1};
-            } else if(direction == 'bottomRight') {
-                var tmp = ((this.coordinateX%2 == 0) ? 0 : 1);
-                ret = {'x': this.coordinateX+tmp, 'y': this.coordinateY+1};
-            } else if(direction == 'bottom') {
-                ret = {'x': this.coordinateX, 'y': this.coordinateY+2};
-            } else if(direction == 'bottomLeft') {
-                var tmp = ((this.coordinateX%2 == 0) ? -1 : 0);
-                ret = {'x': this.coordinateX+tmp, 'y': this.coordinateY-1};
-            } else if(direction == 'topLeft') {
-                var tmp = ((this.coordinateX%2 == 0) ? -1 : 0);
-                ret = {'x': this.coordinateX+tmp, 'y': this.coordinateY+1};
+            var ret = this.getCloseTilesCoordinates();
+
+            if(ret[direction]) {
+                return ret[direction];
+            } else {
+                return false;
+            }
+        }
+
+        getCloseTilesCoordinates() {
+            var ret = [];
+            ret['top'] = {'x': this.coordinateX, 'y': this.coordinateY-2};
+            ret['bottom'] = {'x': this.coordinateX, 'y': this.coordinateY+2};
+
+            if(this.coordinateX%2 == 0 && this.coordinateY%2 == 0) {
+                ret['topRight'] = {'x': this.coordinateX, 'y': this.coordinateY-1};
+                ret['bottomRight'] = {'x': this.coordinateX, 'y': this.coordinateY+1};
+                ret['bottomLeft'] = {'x': this.coordinateX-1, 'y': this.coordinateY+1};
+                ret['topLeft'] = {'x': this.coordinateX-1, 'y': this.coordinateY-1};
+            } else if(this.coordinateX%2 == 0 && this.coordinateY%2 == 1) {
+                ret['topRight'] = {'x': this.coordinateX+1, 'y': this.coordinateY-1};
+                ret['bottomRight'] = {'x': this.coordinateX+1, 'y': this.coordinateY+1};
+                ret['bottomLeft'] = {'x': this.coordinateX, 'y': this.coordinateY+1};
+                ret['topLeft'] = {'x': this.coordinateX, 'y': this.coordinateY-1};
+            } else if(this.coordinateX%2 == 1 && this.coordinateY%2 == 0) {
+                ret['topRight'] = {'x': this.coordinateX, 'y': this.coordinateY-1};
+                ret['bottomRight'] = {'x': this.coordinateX, 'y': this.coordinateY+1};
+                ret['bottomLeft'] = {'x': this.coordinateX-1, 'y': this.coordinateY+1};
+                ret['topLeft'] = {'x': this.coordinateX-1, 'y': this.coordinateY-1};
+            } else if(this.coordinateX%2 == 1 && this.coordinateY%2 == 1) {
+                ret['topRight'] = {'x': this.coordinateX+1, 'y': this.coordinateY-1};
+                ret['bottomRight'] = {'x': this.coordinateX+1, 'y': this.coordinateY+1};
+                ret['bottomLeft'] = {'x': this.coordinateX, 'y': this.coordinateY+1};
+                ret['topLeft'] = {'x': this.coordinateX, 'y': this.coordinateY-1};
             }
             return ret;
+        }
+
+        isAdiacent(x, y) {
+            var ret = this.getCloseTilesCoordinates();
+            console.log('x:'+x + ', y:' + y)
+            for(var key in ret) {
+                if(ret[key].x == x && ret[key].y == y) {
+                    return true;
+                }
+            }
+            return false;
         }
 
 
