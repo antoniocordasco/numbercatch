@@ -5,7 +5,6 @@ module Numbercatch {
     export class TileContentsHelper {
 
         private static ops = ['+', '-', '*', '/'];
-        private static brackets = ['(', ')'];
 
 
         public static getContentsArray(width, height) {
@@ -43,15 +42,11 @@ module Numbercatch {
         private static getRandomOp() {
             return TileContentsHelper.ops[Math.floor((Math.random() * 3) + 1)];
         }
-        private static getRandomBracket() {
-            return TileContentsHelper.brackets[Math.floor((Math.random() * 1) + 1)];
-        }
         private static getAllElementsArray(width, height) {
             var total = width*height;
 
             var nNumbers = Math.ceil(total * .4);
             var nOps = Math.ceil(total * .2);
-            var nBrackets = Math.ceil(total * .2);
 
             var ret = [];
             for(var i=0; i<nNumbers; i++) {
@@ -60,14 +55,8 @@ module Numbercatch {
             for(var i=0; i<nOps; i++) {
                 ret[ret.length] = TileContentsHelper.getRandomOp();
             }
-            for(var i=0; i<nBrackets; i++) {
-                ret[ret.length] = TileContentsHelper.getRandomBracket();
-            }
             return ret;
         }
-
-
-
     };
 }
 
