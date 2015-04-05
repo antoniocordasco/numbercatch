@@ -19,7 +19,7 @@ module.exports = function(grunt) {
         copyto: {
             development: {
                 files: [
-                    {cwd: 'numbercatch/', src: ['*.html', 'vendor/*.*', 'assets/**'], dest: 'development/', expand: true}
+                    {cwd: 'numbercatch/', src: ['*.html', 'vendor/**', 'assets/**'], dest: 'development/', expand: true}
                 ]
             }
         },

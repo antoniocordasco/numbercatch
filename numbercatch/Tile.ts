@@ -4,6 +4,7 @@ module Numbercatch {
 
     export class Tile extends Phaser.Group{
         content;
+        bmpText;
         coordinateX;
         coordinateY;
         public tileImage;
@@ -19,13 +20,13 @@ module Numbercatch {
 
             this.tileImage.inputEnabled = true;
             this.tileImage.events.onInputDown.add(() => {
-                gameScene.moveCharacterTo(this.coordinateX, this.coordinateY, true);
+                gameScene.attemptMoveBeingTo(this.coordinateX, this.coordinateY, true, gameScene.getCharacter());
             }, this);
 
             if(content) {
-                var bmpText = gameScene.add.text(0, 0, this.content, { font: "65px Arial", fill: "#ff0044", align: "center" });
-                bmpText.anchor.setTo(.5,.5);
-                this.add(bmpText);
+                this.bmpText = gameScene.add.text(0, 0, this.content, { font: "65px Arial", fill: "#ff0044", align: "center" });
+                this.bmpText.anchor.setTo(.5,.5);
+                this.add(this.bmpText);
             }
 
             this.scale.x = Tile.scaleMultiplier;
@@ -42,6 +43,7 @@ module Numbercatch {
 
         public addCharacter(character) {
             this.add(character);
+            character.setCoordinates(this.coordinateX, this.coordinateY);
         }
 
         public getPositionFromCoordinates(x, y) {
@@ -103,6 +105,11 @@ module Numbercatch {
 
         public setContent(c) {
             this.content = c;
+            if(c) {
+                this.bmpText.text = c;
+            } else {
+                this.bmpText.text = '';
+            }
         }
         public getContent() {
             return this.content;

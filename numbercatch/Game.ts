@@ -1,5 +1,10 @@
 /// <reference path="references.ts" />
 
+require.config({
+    paths: {
+        mathjs: 'vendor/mathjs/math'
+    }
+});
 module Numbercatch {
 
     export class Game extends Phaser.Game{
@@ -27,5 +32,5 @@ module Numbercatch {
 
 
 
-new Numbercatch.Game();
+window['game'] = new Numbercatch.Game();
 
