@@ -11,11 +11,14 @@ module Numbercatch {
         static TILE_TYPE_FLOOR = 'floor';
         static TILE_TYPE_WALL = 'wall';
         tileType;
+        private gameScene;
 
         public static scaleMultiplier = .3;
 
         public constructor(gameScene, content, type) {
             super(gameScene);
+            this.gameScene = gameScene;
+
             this.content = content;
             this.tileType = type;
 
@@ -24,11 +27,11 @@ module Numbercatch {
 
             this.tileImage.inputEnabled = true;
             this.tileImage.events.onInputDown.add(() => {
-                gameScene.attemptMoveBeingTo(this.coordinateX, this.coordinateY, true, gameScene.getCharacter());
+                this.gameScene.attemptMoveBeingTo(this.coordinateX, this.coordinateY, true, this.gameScene.getCharacter());
             }, this);
 
             if(content) {
-                this.bmpText = gameScene.add.text(0, 0, this.content, { font: "65px Arial", fill: "#ff0044", align: "center" });
+                this.bmpText = this.gameScene.add.text(0, 0, this.content, { font: "65px Arial", fill: "#ff0044", align: "center" });
                 this.bmpText.anchor.setTo(.5,.5);
                 this.add(this.bmpText);
             }
@@ -95,12 +98,14 @@ module Numbercatch {
 
         isAdiacent(x, y) {
             var ret = this.getCloseTilesCoordinates();
-            console.log('x:'+x + ', y:' + y)
+
+        //    console.log('x:'+x + ', y:' + y); console.log('x:'+this.coordinateX + ', y:' + this.coordinateY);
             for(var key in ret) {
                 if(ret[key].x == x && ret[key].y == y) {
                     return true;
                 }
             }
+            console.log('not adiacent');
             return false;
         }
 

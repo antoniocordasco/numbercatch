@@ -21,6 +21,7 @@ module Numbercatch {
             this.coordinateY = y;
             if(this.checkCollisions()) {
                 console.log('collision!');
+                this.gameScene.endOfLevel(false);
             }
         }
 

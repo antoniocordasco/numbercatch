@@ -10,11 +10,11 @@ module Numbercatch {
         public matrixHeight = 13;
         private levelData;
 
-
         preload() {
             this.load.image('cell', 'assets/images/cell.png');
             this.load.image('floor', 'assets/images/hexagon.png');
             this.load.image('wall', 'assets/images/hexagon2.png');
+            this.load.image('ghostNextTile', 'assets/images/ghostNextTile.png');
             this.load.image('character1', 'assets/images/character1.png');
             this.load.image('ghost1', 'assets/images/ghost1.png');
         }
@@ -37,6 +37,10 @@ module Numbercatch {
         }
 
         create() {
+
+            console.log('create');
+
+
             this.stage.backgroundColor = '#eeeeee';
 
 
@@ -61,7 +65,7 @@ module Numbercatch {
 
 
             this.generateAndPlaceBeings(1, Being.BEING_TYPE_CHARACTER);
-            this.generateAndPlaceBeings(3, Being.BEING_TYPE_GHOST);
+            this.generateAndPlaceBeings(5, Being.BEING_TYPE_GHOST);
 
 
             var selectedLevel = this.getRandomLevel();
@@ -81,11 +85,15 @@ module Numbercatch {
                     var pos = TileContentsHelper.getRandonPos(this.matrixWidth, this.matrixHeight);
                 }
                 if(beingType == Being.BEING_TYPE_GHOST) {
-                    this.beings[this.beings.length] = new Ghost(this, 0, 0, this);
+                    var tmp = new Ghost(this, 0, 0, this);
+                    this.attemptMoveBeingTo(pos.x, pos.y, false, tmp);
+                    tmp.setNextMoveTile();
+                    this.beings[this.beings.length] = tmp;
                 } else {
                     this.beings[this.beings.length] = new Character(this, 0, 0, this);
+                    this.attemptMoveBeingTo(pos.x, pos.y, false, this.beings[this.beings.length-1]);
                 }
-                this.attemptMoveBeingTo(pos.x, pos.y, false, this.beings[this.beings.length-1]);
+
             }
         }
 
@@ -98,17 +106,25 @@ module Numbercatch {
             if(this.cells.isEquationComplete()) {
 
                 var cells = this.cells;
+                var that = this;
 
                 require(['mathjs'], function (math) {
                     // use math.js
-                    if(math.eval(cells.getEquationString('left')) == math.eval(cells.getEquationString('right'))) {
-                        alert('you win!');
-                    } else {
-                        alert('try again');
-                    }
+                    that.endOfLevel(math.eval(cells.getEquationString('left')) == math.eval(cells.getEquationString('right')));
                 });
             }
         }
+
+
+        private endOfLevel(win) {
+            if(win) {
+                alert('you win!');
+            } else {
+                alert('try again');
+            }
+            this.game.state.start("GameScene");
+        }
+
 
 
         public attemptMoveBeingTo(x, y, checkAdiacent, being) {
