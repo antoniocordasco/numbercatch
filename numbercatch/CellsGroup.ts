@@ -31,7 +31,7 @@ module Numbercatch {
                 cell.x = tmp;
                 tmp += cell.width;
                 this.add(cell);
-                this.leftCells[this.rightCells.length] = cell;
+                this.rightCells[this.rightCells.length] = cell;
             }
         }
 
