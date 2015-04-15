@@ -8,9 +8,9 @@ module Numbercatch {
         coordinateY;
 
 
-        public constructor(game, x, y) {
+        public constructor(game, x, y, type) {
             super(game, x, y);
-            Phaser.Sprite.call(this, game, x, y, 'tile');
+            Phaser.Sprite.call(this, game, x, y, type);
             this.anchor.setTo(.5,.5);
 
 

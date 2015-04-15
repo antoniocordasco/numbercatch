@@ -11,7 +11,7 @@ module Numbercatch {
 
 
         constructor() {
-            super(1024, 768, Phaser.AUTO, 'content', { preload: this.preload, create: this.create });
+            super(1024, 600, Phaser.AUTO, 'content', { preload: this.preload, create: this.create });
 
 
 

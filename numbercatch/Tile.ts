@@ -8,14 +8,18 @@ module Numbercatch {
         coordinateX;
         coordinateY;
         public tileImage;
+        static TILE_TYPE_FLOOR = 'floor';
+        static TILE_TYPE_WALL = 'wall';
+        tileType;
 
         public static scaleMultiplier = .3;
 
-        public constructor(gameScene, content) {
+        public constructor(gameScene, content, type) {
             super(gameScene);
             this.content = content;
+            this.tileType = type;
 
-            this.tileImage = new TileSprite(gameScene, 0, 0);
+            this.tileImage = new TileSprite(gameScene, 0, 0, type);
             this.add(this.tileImage);
 
             this.tileImage.inputEnabled = true;

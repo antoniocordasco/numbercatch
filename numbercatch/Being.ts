@@ -19,7 +19,33 @@ module Numbercatch {
         setCoordinates(x, y) {
             this.coordinateX = x;
             this.coordinateY = y;
+            if(this.checkCollisions()) {
+                console.log('collision!');
+            }
         }
+
+        checkCollisions() {
+            if(this.beingType == Being.BEING_TYPE_CHARACTER) {
+                var ghosts = this.gameScene.getGhosts();
+                for(var k in ghosts) {
+                   if(this.collidesWith(ghosts[k])) {
+                        return true;
+                   }
+                }
+            } else if(this.beingType == Being.BEING_TYPE_GHOST) {
+                var character = this.gameScene.getCharacter();
+                if(this.collidesWith(character)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        collidesWith(being) {
+            return (this.coordinateX == being.coordinateX && this.coordinateY == being.coordinateY);
+        }
+
+
     };
 }
 

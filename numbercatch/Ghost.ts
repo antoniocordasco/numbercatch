@@ -25,6 +25,7 @@ module Numbercatch {
 
             while(!nextTile) {
                 var directionNames = [];
+            //    console.log(this.coordinateX + ' | ' + this.coordinateY);
                 var adiacentTilesCoordinates = currentTile.getCloseTilesCoordinates();
                 for(var k in adiacentTilesCoordinates) {
                     directionNames[directionNames.length] = k;

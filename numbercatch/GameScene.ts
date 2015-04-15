@@ -6,11 +6,14 @@ module Numbercatch {
         public cells;
 
         private beings = [];
+        public matrixWidth = 9;
+        public matrixHeight = 13;
 
 
         preload() {
             this.load.image('cell', 'assets/images/cell.png');
-            this.load.image('tile', 'assets/images/hexagon.png');
+            this.load.image('floor', 'assets/images/hexagon.png');
+            this.load.image('wall', 'assets/images/hexagon2.png');
             this.load.image('character1', 'assets/images/character1.png');
             this.load.image('ghost1', 'assets/images/ghost1.png');
 
@@ -19,17 +22,20 @@ module Numbercatch {
 
         create() {
             this.stage.backgroundColor = '#eeeeee';
-            var width = 8;
-            var height = 12;
 
-            var contents = TileContentsHelper.getContentsArray(width, height);
+
+            var contents = TileContentsHelper.getContentsArray(this.matrixWidth, this.matrixHeight);
 
             this.tiles = [];
-            for (var i=0; i<width; i++) {
+            for (var i=0; i<this.matrixWidth; i++) {
                 this.tiles[i] = [];
 
-                for (var ii=0; ii<height; ii++) {
-                    var tile = new Tile(this, contents[i][ii]);
+                for (var ii=0; ii<this.matrixHeight; ii++) {
+                    if(contents[i][ii] != '#') {
+                        var tile = new Tile(this, contents[i][ii], Tile.TILE_TYPE_FLOOR);
+                    } else {
+                        var tile = new Tile(this, '', Tile.TILE_TYPE_WALL);
+                    }
                     tile.setCoordinatesAndPosition(i, ii);
 
                     this.add.existing(tile);
@@ -37,27 +43,34 @@ module Numbercatch {
                 }
             }
 
-            this.beings[0] = new Character(this, 0, 0, this);
-            this.attemptMoveBeingTo(3, 3, false, this.getCharacter());
 
-            this.beings[1] = new Ghost(this, 0, 0, this);
-            this.beings[2] = new Ghost(this, 0, 0, this);
-            this.beings[3] = new Ghost(this, 0, 0, this);
-            this.attemptMoveBeingTo(2, 5, false, this.beings[1]);
-            this.attemptMoveBeingTo(4, 7, false, this.beings[2]);
-            this.attemptMoveBeingTo(1, 1, false, this.beings[3]);
-
-
-
+            this.generateAndPlaceBeings(1, Being.BEING_TYPE_CHARACTER);
+            this.generateAndPlaceBeings(3, Being.BEING_TYPE_GHOST);
 
             this.cells = new CellsGroup(this, ['2', '+', false, '+', '5', '-', false], 10);
             this.cells.x = 100;
             this.cells.y = 500;
 
             this.add.existing(this.cells);
-
-
         }
+
+        // creates a few ghosts and places them on floor tiles
+        private generateAndPlaceBeings(numberOfBeings, beingType) {
+            for(var i=0; i<numberOfBeings; i++) {
+                var pos = {'x': -1, 'y': -1};
+                while(pos.x<0 || pos.y<0 || this.getTile(pos.x, pos.y).tileType != Tile.TILE_TYPE_FLOOR) {
+                    var pos = TileContentsHelper.getRandonPos(this.matrixWidth, this.matrixHeight);
+                }
+                if(beingType == Being.BEING_TYPE_GHOST) {
+                    this.beings[this.beings.length] = new Ghost(this, 0, 0, this);
+                } else {
+                    this.beings[this.beings.length] = new Character(this, 0, 0, this);
+                }
+                this.attemptMoveBeingTo(pos.x, pos.y, false, this.beings[this.beings.length-1]);
+            }
+        }
+
+
 
         public grabElement(x, y) {
             var content = this.tiles[x][y].getContent();
@@ -83,7 +96,7 @@ module Numbercatch {
 
         public attemptMoveBeingTo(x, y, checkAdiacent, being) {
 
-            console.log(being);
+        //    console.log(being);
             if(checkAdiacent) {
                 var oldX = parseInt(being.coordinateX);
                 var oldY = parseInt(being.coordinateY);
@@ -94,8 +107,10 @@ module Numbercatch {
 
 
             if(!checkAdiacent || this.tiles[oldX][oldY].isAdiacent(x, y)) {
-                this.tiles[x][y].addCharacter(being);
-                return true;
+                if(this.tiles[x][y].tileType == Tile.TILE_TYPE_FLOOR) {
+                    this.tiles[x][y].addCharacter(being);
+                    return true;
+                }
             } else if(x == oldX && y == oldY) {
                 this.grabElement(x, y); // if you click on the same tile the character is on, then you don't move but you grab the element from it
             }
@@ -109,6 +124,15 @@ module Numbercatch {
                 }
             }
             return false;
+        }
+        public getGhosts() {
+            var ret = [];
+            for(var k in this.beings) {
+                if(this.beings[k].beingType == Being.BEING_TYPE_GHOST) {
+                    ret[ret.length] = this.beings[k];
+                }
+            }
+            return ret;
         }
 
         public getTile(x, y) {
