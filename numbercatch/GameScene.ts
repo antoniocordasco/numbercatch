@@ -47,7 +47,7 @@ module Numbercatch {
             this.generateAndPlaceBeings(1, Being.BEING_TYPE_CHARACTER);
             this.generateAndPlaceBeings(3, Being.BEING_TYPE_GHOST);
 
-            this.cells = new CellsGroup(this, ['2', '+', false, '+', '5', '-', false], 10);
+            this.cells = new CellsGroup(this, ['2', '+', false, '+', '5', '-', false], ['10']);
             this.cells.x = 100;
             this.cells.y = 500;
 
@@ -82,7 +82,7 @@ module Numbercatch {
 
                 require(['mathjs'], function (math) {
                     // use math.js
-                    if(math.eval(cells.getEquationLeftString()) == cells.getExpectedResult()) {
+                    if(math.eval(cells.getEquationString('left')) == math.eval(cells.getEquationString('right'))) {
                         alert('you win!');
                     } else {
                         alert('try again');
