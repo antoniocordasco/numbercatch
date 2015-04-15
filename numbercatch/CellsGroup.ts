@@ -42,6 +42,12 @@ module Numbercatch {
                     return;
                 }
             }
+            for(var k in this.rightCells) {
+                if(!this.rightCells[k].content) {
+                    this.rightCells[k].setContent(content);
+                    return;
+                }
+            }
         }
 
         isEquationComplete() {
