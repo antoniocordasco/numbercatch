@@ -8,6 +8,7 @@ module Numbercatch {
         private beings = [];
         public matrixWidth = 9;
         public matrixHeight = 13;
+        private levelData;
 
 
         preload() {
@@ -16,9 +17,24 @@ module Numbercatch {
             this.load.image('wall', 'assets/images/hexagon2.png');
             this.load.image('character1', 'assets/images/character1.png');
             this.load.image('ghost1', 'assets/images/ghost1.png');
-
         }
 
+        getRandomLevel() {
+            this.levelData = [
+                {'left': ['2', '+', false, '+', '5'], 'right': ['7', '+', '3']},
+                {'left': ['7', '-', '3'], 'right': [false]},
+                {'left': ['1', '*', '3'], 'right': [false]},
+                {'left': ['2', false, '2'], 'right': ['4']},
+                {'left': ['2', false, '2'], 'right': ['1']},
+                {'left': ['2', '-', false, '+', '2'], 'right': [false]}
+            ];
+
+            return this.levelData[this.getRandomInteger(0, this.levelData.length-1)];
+        }
+
+        getRandomInteger(min, max) {
+            return Math.floor(Math.random() * max) + min;
+        }
 
         create() {
             this.stage.backgroundColor = '#eeeeee';
@@ -47,7 +63,10 @@ module Numbercatch {
             this.generateAndPlaceBeings(1, Being.BEING_TYPE_CHARACTER);
             this.generateAndPlaceBeings(3, Being.BEING_TYPE_GHOST);
 
-            this.cells = new CellsGroup(this, ['2', '+', false, '+', '5', '-', false], ['10']);
+
+            var selectedLevel = this.getRandomLevel();
+
+            this.cells = new CellsGroup(this, selectedLevel.left, selectedLevel.right);
             this.cells.x = 100;
             this.cells.y = 500;
 
@@ -88,8 +107,6 @@ module Numbercatch {
                         alert('try again');
                     }
                 });
-
-
             }
         }
 
