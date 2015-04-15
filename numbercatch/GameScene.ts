@@ -26,7 +26,7 @@ module Numbercatch {
                 {'left': ['1', '*', '3'], 'right': [false]},
                 {'left': ['2', false, '2'], 'right': ['4']},
                 {'left': ['2', false, '2'], 'right': ['1']},
-                {'left': ['2', '-', false, '+', '2'], 'right': [false]}
+                {'left': ['2', '+', '2'], 'right': [false]}
             ];
 
             return this.levelData[this.getRandomInteger(0, this.levelData.length-1)];
